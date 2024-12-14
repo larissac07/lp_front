@@ -1,6 +1,6 @@
 var clientes = []
 var clienteAlterado = null
-var academias = []
+var estilos = []
 
 function mostrarModal(){
     const modal = document.getElementById('modal');
@@ -32,7 +32,7 @@ function alterar(cpf){
              document.getElementById("cabelo").value = cliente.cabelo
              document.getElementById("nomeGato").value = cliente.nomeGato
              document.getElementById("dataNascimento").value = cliente.dataNascimento
-             document.getElementById("academia").value = cliente.gym.id
+             document.getElementById("estilo").value = cliente.style.id
              clienteAlterado = cliente
              mostrarModal()
 document.getElementById("cpf").readOnly = true;
@@ -65,7 +65,7 @@ function salvar(){
     let cabelo = document.getElementById('cabelo').value
     let nomeGato = document.getElementById('nomeGato').value
     let dataNascimento = document.getElementById('dataNascimento').value
-    let idAcademia = document.getElementById('academia').value
+    let idEstilo = document.getElementById('estilo').value
 
     let novoBodyBuilder = {
         nome: nome,
@@ -75,7 +75,7 @@ function salvar(){
         cabelo: cabelo,
         nomeGato: nomeGato,
         dataNascimento: dataNascimento,
-        idAcademia: idAcademia
+        idEstilo: idEstilo
     }
 
     //se o clienteAlterado == null, então está adicionando um novo cliente
@@ -132,7 +132,7 @@ function atualizarLista(){
 
         let linhaTabela = document.createElement('tr')
         linhaTabela.innerHTML = `
-                <td>${cliente.gym.nome}</td>
+                <td>${cliente.style.nome}</td>
                 <td>${cliente.cpf}</td>
                 <td>${cliente.nome}</td>
                 <td>${cliente.celular}</td>
@@ -162,8 +162,9 @@ function carregarClientes(){
         console.log(data)
         atualizarLista()
     }).catch((error) => {
-        alert("Erro ao listar clientes")
+       alert("Erro ao listar clientes")
     })
+
 }
 
 function buscarClientes() {
@@ -186,8 +187,8 @@ function buscarClientes() {
     });
 }
 
-function carregarAcademias(){
-    fetch('http://localhost:3000/gym', {
+function carregarEstilos(){
+    fetch('http://localhost:3000/style', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -195,21 +196,21 @@ function carregarAcademias(){
         mode: 'cors'
     }).then((response) => response.json())
     .then((data) => {
-        academias = data
+        estilos = data
         console.log(data)
-        atualizarListaAcademias()
+        atualizarListaEstilos()
     }).catch((error) => {
-        alert("Erro ao listar academias")
+        alert("Erro ao listar estilos")
     })
 }
 
-function atualizarListaAcademias(){
-    let listaAcademia = document.getElementById("academia")
-    for(let i = 0; i <academias.length; i++){
-        let academia = academias[i]
+function atualizarListaEstilos(){
+    let listaEstilo = document.getElementById("estilo")
+    for(let i = 0; i <estilos.length; i++){
+        let estilo = estilos[i]
         let option = document.createElement("option")
-        option.value = academia.id 
-        option.innerHTML = academia.nome
-        listaAcademia.appendChild(option)
+        option.value = estilo.id 
+        option.innerHTML = estilo.nome
+        listaEstilo.appendChild(option)
     }
 }
