@@ -1,5 +1,6 @@
 var clientes = []
 var clienteAlterado = null
+var academias = []
 
 function mostrarModal(){
     const modal = document.getElementById('modal');
@@ -31,6 +32,7 @@ function alterar(cpf){
              document.getElementById("cabelo").value = cliente.cabelo
              document.getElementById("nomeGato").value = cliente.nomeGato
              document.getElementById("dataNascimento").value = cliente.dataNascimento
+             document.getElementById("academia").value = cliente.gym.id
              clienteAlterado = cliente
              mostrarModal()
 document.getElementById("cpf").readOnly = true;
@@ -63,6 +65,7 @@ function salvar(){
     let cabelo = document.getElementById('cabelo').value
     let nomeGato = document.getElementById('nomeGato').value
     let dataNascimento = document.getElementById('dataNascimento').value
+    let idAcademia = document.getElementById('academia').value
 
     let novoBodyBuilder = {
         nome: nome,
@@ -71,7 +74,8 @@ function salvar(){
         altura: altura,
         cabelo: cabelo,
         nomeGato: nomeGato,
-        dataNascimento: dataNascimento
+        dataNascimento: dataNascimento,
+        idAcademia: idAcademia
     }
 
     //se o clienteAlterado == null, então está adicionando um novo cliente
@@ -128,6 +132,7 @@ function atualizarLista(){
 
         let linhaTabela = document.createElement('tr')
         linhaTabela.innerHTML = `
+                <td>${cliente.gym.nome}</td>
                 <td>${cliente.cpf}</td>
                 <td>${cliente.nome}</td>
                 <td>${cliente.celular}</td>
@@ -179,4 +184,32 @@ function buscarClientes() {
     .catch(error => {
         alert("Erro ao buscar clientes");
     });
-} 
+}
+
+function carregarAcademias(){
+    fetch('http://localhost:3000/gym', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        mode: 'cors'
+    }).then((response) => response.json())
+    .then((data) => {
+        academias = data
+        console.log(data)
+        atualizarListaAcademias()
+    }).catch((error) => {
+        alert("Erro ao listar academias")
+    })
+}
+
+function atualizarListaAcademias(){
+    let listaAcademia = document.getElementById("academia")
+    for(let i = 0; i <academias.length; i++){
+        let academia = academias[i]
+        let option = document.createElement("option")
+        option.value = academia.id 
+        option.innerHTML = academia.nome
+        listaAcademia.appendChild(option)
+    }
+}
